@@ -17,7 +17,9 @@ package com.jagrosh.jmusicbot.commands;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jmusicbot.Bot;
+import com.jagrosh.jmusicbot.BotConfig;
 import com.jagrosh.jmusicbot.settings.Settings;
+import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Role;
 
@@ -25,16 +27,16 @@ import net.dv8tion.jda.api.entities.Role;
  *
  * @author John Grosh (john.a.grosh@gmail.com)
  */
-public abstract class DJCommand extends MusicCommand
-{
-    public DJCommand(Bot bot)
-    {
+@Slf4j
+public abstract class DJCommand extends MusicCommand {
+    private static BotConfig botConfig;
+    public DJCommand(Bot bot) {
         super(bot);
-        this.category = new Category("DJ", event -> checkDJPermission(event));
+        botConfig = bot.getConfig();
+        this.category = new Category("DJ", DJCommand::checkDJPermission);
     }
     
-    public static boolean checkDJPermission(CommandEvent event)
-    {
+    public static boolean checkDJPermission(CommandEvent event) {
         if(event.getAuthor().getId().equals(event.getClient().getOwnerId()))
             return true;
         if(event.getGuild()==null)
@@ -43,6 +45,9 @@ public abstract class DJCommand extends MusicCommand
             return true;
         Settings settings = event.getClient().getSettingsFor(event.getGuild());
         Role dj = settings.getRole(event.getGuild());
+        if(event.getMember().getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase(botConfig.getDjRole()))){
+            return true;
+        }
         return dj!=null && (event.getMember().getRoles().contains(dj) || dj.getIdLong()==event.getGuild().getIdLong());
     }
 }

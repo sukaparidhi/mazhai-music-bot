@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.jagrosh</groupId>
     <artifactId>JMusicBot</artifactId>
-    <version>Snapshot</version>
+    <version>0.3.6</version>
     <packaging>jar</packaging>
     
     <repositories>
@@ -26,6 +26,12 @@
     
     <dependencies>
         <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.20</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>net.dv8tion</groupId> 
             <artifactId>JDA</artifactId> 
             <version>4.3.0_312</version>
@@ -35,11 +41,11 @@
             <artifactId>lavaplayer</artifactId>
             <version>1.3.78</version>
         </dependency>
-        <dependency>
-            <groupId>com.sedmelluq</groupId>
-            <artifactId>lavaplayer-natives-extra</artifactId>
-            <version>1.3.13</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.sedmelluq</groupId>-->
+<!--            <artifactId>lavaplayer-natives-extra</artifactId>-->
+<!--            <version>1.3.13</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>com.jagrosh</groupId>
             <artifactId>jda-utilities</artifactId>
@@ -47,8 +53,8 @@
             <type>pom</type>
         </dependency>
         <dependency>
-            <groupId>com.jagrosh</groupId>
-            <artifactId>JLyrics</artifactId>
+            <groupId>com.jagrosh.JLyrics</groupId>
+            <artifactId>jlyrics</artifactId>
             <version>0.5</version>
         </dependency>
         <dependency>
