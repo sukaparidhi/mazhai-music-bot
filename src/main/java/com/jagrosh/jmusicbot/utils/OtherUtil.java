@@ -23,6 +23,10 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import okhttp3.*;
@@ -136,7 +140,13 @@ public class OtherUtil
         }
         return Activity.playing(game);
     }
-   
+
+    public static List<String> parseStringListToLowercase(List<String> stringToConvert){
+        return stringToConvert.stream()
+                .map(String::toLowerCase)
+                .collect(Collectors.toList());
+    }
+
     public static String makeNonEmpty(String str)
     {
         return str == null || str.isEmpty() ? "\u200B" : str;

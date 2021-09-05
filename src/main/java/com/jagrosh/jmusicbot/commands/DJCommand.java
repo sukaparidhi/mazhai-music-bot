@@ -29,25 +29,24 @@ import net.dv8tion.jda.api.entities.Role;
  */
 @Slf4j
 public abstract class DJCommand extends MusicCommand {
-    private static BotConfig botConfig;
+    private static BotConfig BOT_CONFIG;
     public DJCommand(Bot bot) {
         super(bot);
-        botConfig = bot.getConfig();
+        BOT_CONFIG = bot.getConfig();
         this.category = new Category("DJ", DJCommand::checkDJPermission);
     }
     
     public static boolean checkDJPermission(CommandEvent event) {
         if(event.getAuthor().getId().equals(event.getClient().getOwnerId()))
             return true;
-        if(event.getGuild()==null)
+        if(event.getGuild() == null)
             return true;
         if(event.getMember().hasPermission(Permission.MANAGE_SERVER))
             return true;
+        if(event.getMember().getRoles().stream().anyMatch(role -> BOT_CONFIG.getDjRole().contains(role.getName().toLowerCase())))
+            return true;
         Settings settings = event.getClient().getSettingsFor(event.getGuild());
         Role dj = settings.getRole(event.getGuild());
-        if(event.getMember().getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase(botConfig.getDjRole()))){
-            return true;
-        }
         return dj!=null && (event.getMember().getRoles().contains(dj) || dj.getIdLong()==event.getGuild().getIdLong());
     }
 }

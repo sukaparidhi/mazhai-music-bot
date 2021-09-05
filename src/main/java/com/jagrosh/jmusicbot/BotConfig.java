@@ -23,7 +23,10 @@ import com.typesafe.config.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 
@@ -41,7 +44,8 @@ public class BotConfig
     
     private Path path = null;
     private String token, prefix, altprefix, helpWord, playlistsFolder,
-            successEmoji, warningEmoji, errorEmoji, loadingEmoji, searchingEmoji, djRole;
+            successEmoji, warningEmoji, errorEmoji, loadingEmoji, searchingEmoji;
+    private List<String> djRole = new ArrayList<>();
     private boolean stayInChannel, songInGame, npImages, updatealerts, useEval, dbots;
     private long owner, maxSeconds, aloneTimeUntilStop;
     private OnlineStatus status;
@@ -98,7 +102,7 @@ public class BotConfig
             playlistsFolder = config.getString("playlistsfolder");
             aliases = config.getConfig("aliases");
             transforms = config.getConfig("transforms");
-            djRole = config.getString("djrole");
+            djRole = OtherUtil.parseStringListToLowercase(config.getStringList("djrole"));
             dbots = owner == 113156185389092864L;
             
             // we may need to write a new config file
@@ -331,7 +335,7 @@ public class BotConfig
         return transforms;
     }
 
-    public String getDjRole(){
+    public List<String> getDjRole(){
         return djRole;
     }
 }
