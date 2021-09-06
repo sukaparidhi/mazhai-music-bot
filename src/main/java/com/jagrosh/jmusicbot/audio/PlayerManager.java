@@ -38,7 +38,8 @@ public class PlayerManager extends DefaultAudioPlayerManager
     public void init()
     {
         TransformativeAudioSourceManager.createTransforms(bot.getConfig().getTransforms()).forEach(t -> registerSourceManager(t));
-        // this.registerSourceManager(new DeezerSourceManager());
+        this.registerSourceManager(new DeezerSourceManager());
+        this.registerSourceManager(new SpotifySourceManager(bot.getConfig()));
         AudioSourceManagers.registerRemoteSources(this);
         AudioSourceManagers.registerLocalSource(this);
 

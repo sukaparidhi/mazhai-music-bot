@@ -43,8 +43,19 @@ public class BotConfig
     private final static String END_TOKEN = "/// END OF JMUSICBOT CONFIG ///";
     
     private Path path = null;
-    private String token, prefix, altprefix, helpWord, playlistsFolder,
-            successEmoji, warningEmoji, errorEmoji, loadingEmoji, searchingEmoji;
+    private String token;
+    private String prefix;
+    private String altprefix;
+    private String helpWord;
+    private String playlistsFolder;
+    private String successEmoji;
+    private String warningEmoji;
+    private String errorEmoji;
+    private String loadingEmoji;
+    private String searchingEmoji;
+    private String spotifyClientId;
+    private String spotifyClientSecret;
+    private String youtubeAccessToken;
     private List<String> djRole = new ArrayList<>();
     private boolean stayInChannel, songInGame, npImages, updatealerts, useEval, dbots;
     private long owner, maxSeconds, aloneTimeUntilStop;
@@ -58,7 +69,7 @@ public class BotConfig
     {
         this.prompt = prompt;
     }
-    
+
     public void load()
     {
         valid = false;
@@ -103,6 +114,12 @@ public class BotConfig
             aliases = config.getConfig("aliases");
             transforms = config.getConfig("transforms");
             djRole = OtherUtil.parseStringListToLowercase(config.getStringList("djrole"));
+
+            spotifyClientId = config.getString("spotifyClientId");
+            spotifyClientSecret = config.getString("spotifyClientSecret");
+            youtubeAccessToken = config.getString("youtubeAccessToken");
+
+
             dbots = owner == 113156185389092864L;
             
             // we may need to write a new config file
@@ -337,5 +354,17 @@ public class BotConfig
 
     public List<String> getDjRole(){
         return djRole;
+    }
+
+    public String getSpotifyClientId() {
+        return spotifyClientId;
+    }
+
+    public String getSpotifyClientSecret() {
+        return spotifyClientSecret;
+    }
+
+    public String getYoutubeAccessToken() {
+        return youtubeAccessToken;
     }
 }
