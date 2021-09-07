@@ -10,7 +10,6 @@ import com.google.api.services.youtube.model.SearchResult;
 import com.google.api.services.youtube.model.Video;
 import com.google.api.services.youtube.model.VideoListResponse;
 import com.jagrosh.jmusicbot.Bot;
-import com.jagrosh.jmusicbot.JMusicBot;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -20,10 +19,8 @@ import java.security.GeneralSecurityException;
 public class YoutubeUtil {
 
     private final YouTube client;
-    private final Bot bot;
 
     private YoutubeUtil(Bot bot) throws GeneralSecurityException, IOException {
-        this.bot = bot;
         this.client = new YouTube.Builder(
                 GoogleNetHttpTransport.newTrustedTransport(),
                 JacksonFactory.getDefaultInstance(),
