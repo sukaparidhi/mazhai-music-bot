@@ -26,8 +26,6 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import org.apache.hc.core5.http.ParseException;
-import org.jetbrains.annotations.NotNull;
-import org.json.JSONObject;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -93,7 +91,6 @@ public class SpotifySourceManager implements AudioSourceManager {
                 audioItem = buildTopTenPlaylist(rawUrl);
             return audioItem;
         } catch (MalformedURLException e) {
-            log.error("Failed to load the item!", e);
             return null;
         }
     }

@@ -121,6 +121,7 @@ public class JMusicBot
                         new PlaynextCmd(bot),
                         new RepeatCmd(bot),
                         new SkiptoCmd(bot),
+                        new SeektoCmd(bot),
                         new StopCmd(bot),
                         new VolumeCmd(bot),
                         

@@ -15,7 +15,12 @@
  */
 package com.jagrosh.jmusicbot.utils;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
@@ -25,9 +30,29 @@ import net.dv8tion.jda.api.entities.VoiceChannel;
  * @author John Grosh <john.a.grosh@gmail.com>
  */
 public class FormatUtil {
-    
-    public static String formatTime(long duration)
-    {
+
+    public static long convertTimeToMilli(String timestamp) {
+        String[] splittedTimestamp = timestamp.split(":");
+        int count = splittedTimestamp.length;
+
+        if (count == 1)
+            return TimeUnit.SECONDS.toMillis(Long.parseLong(splittedTimestamp[0]));
+        else if (count >= 2)
+            return TimeUnit.MINUTES.toMillis(Long.parseLong(splittedTimestamp[0])) + TimeUnit.SECONDS.toMillis(Long.parseLong(splittedTimestamp[1]));
+        else
+            return 0L;
+    }
+
+    public static String formatTimestamp(long millis) {
+        long seconds = millis / 1000;
+        long hours = Math.floorDiv(seconds, 3600);
+        seconds = seconds - (hours * 3600);
+        long mins = Math.floorDiv(seconds, 60);
+        seconds = seconds - (mins * 60);
+        return (hours == 0 ? "" : hours + ":") + String.format("%02d", mins) + ":" + String.format("%02d", seconds);
+    }
+
+    public static String formatTime(long duration) {
         if(duration == Long.MAX_VALUE)
             return "LIVE";
         long seconds = Math.round(duration/1000.0);
