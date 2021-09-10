@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.jagrosh</groupId>
     <artifactId>JMusicBot</artifactId>
-    <version>0.3.9</version>
+    <version>0.3.10</version>
     <packaging>jar</packaging>
     
     <repositories>
@@ -84,9 +84,9 @@
             <type>pom</type>
         </dependency>
         <dependency>
-            <groupId>com.jagrosh.JLyrics</groupId>
-            <artifactId>jlyrics</artifactId>
-            <version>0.5</version>
+            <groupId>com.github.jagrosh</groupId>
+            <artifactId>JLyrics</artifactId>
+            <version>master</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
