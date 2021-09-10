@@ -28,10 +28,14 @@ import com.jagrosh.jmusicbot.gui.GUI;
 import com.jagrosh.jmusicbot.settings.SettingsManager;
 import com.jagrosh.jmusicbot.utils.OtherUtil;
 import java.awt.Color;
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import javax.security.auth.login.LoginException;
 import net.dv8tion.jda.api.*;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Icon;
+import net.dv8tion.jda.api.managers.AccountManager;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
@@ -84,7 +88,7 @@ public class JMusicBot
                                 new String[]{"High-quality music playback", "FairQueue™ Technology", "Easy to host yourself"},
                                 RECOMMENDED_PERMS);
         aboutCommand.setIsAuthor(false);
-        aboutCommand.setReplacementCharacter("\uD83C\uDFB6"); // 🎶
+        aboutCommand.setReplacementCharacter("\uD83C\uDFB6");
         
         // set up the command client
         CommandClientBuilder cb = new CommandClientBuilder()
@@ -117,6 +121,7 @@ public class JMusicBot
                         new PlaynextCmd(bot),
                         new RepeatCmd(bot),
                         new SkiptoCmd(bot),
+                        new SeektoCmd(bot),
                         new StopCmd(bot),
                         new VolumeCmd(bot),
                         
@@ -137,28 +142,24 @@ public class JMusicBot
         if(config.useEval())
             cb.addCommand(new EvalCmd(bot));
         boolean nogame = false;
-        if(config.getStatus()!=OnlineStatus.UNKNOWN)
+        if(config.getStatus() != OnlineStatus.UNKNOWN)
             cb.setStatus(config.getStatus());
-        if(config.getGame()==null)
+        if(config.getGame() == null)
             cb.useDefaultGame();
-        else if(config.getGame().getName().equalsIgnoreCase("none"))
-        {
+        else if(config.getGame().getName().equalsIgnoreCase("none")) {
             cb.setActivity(null);
             nogame = true;
         }
         else
             cb.setActivity(config.getGame());
         
-        if(!prompt.isNoGUI())
-        {
-            try 
-            {
+        if(!prompt.isNoGUI()) {
+            try {
                 GUI gui = new GUI(bot);
                 bot.setGUI(gui);
                 gui.init();
             } 
-            catch(Exception e) 
-            {
+            catch(Exception e) {
                 log.error("Could not start GUI. If you are "
                         + "running on a server or in a location where you cannot display a "
                         + "window, please run in nogui mode using the -Dnogui=true flag.");
@@ -168,31 +169,34 @@ public class JMusicBot
         log.info("Loaded config from " + config.getConfigLocation());
         
         // attempt to log in and start
-        try
-        {
+        try {
             JDA jda = JDABuilder.create(config.getToken(), Arrays.asList(INTENTS))
                     .enableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
                     .disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.EMOTE, CacheFlag.ONLINE_STATUS)
                     .setActivity(nogame ? null : Activity.playing("loading..."))
-                    .setStatus(config.getStatus()==OnlineStatus.INVISIBLE || config.getStatus()==OnlineStatus.OFFLINE 
+                    .setStatus(config.getStatus() == OnlineStatus.INVISIBLE || config.getStatus() == OnlineStatus.OFFLINE
                             ? OnlineStatus.INVISIBLE : OnlineStatus.DO_NOT_DISTURB)
                     .addEventListeners(cb.build(), waiter, new Listener(bot))
                     .setBulkDeleteSplittingEnabled(true)
                     .build();
+
+            Icon botIcon = Icon.from(new File(bot.getConfig().getIconPath()));
+            jda.getSelfUser().getManager().setAvatar(botIcon).queue();
+
             bot.setJDA(jda);
         }
-        catch (LoginException ex)
-        {
+        catch (LoginException ex) {
             prompt.alert(Prompt.Level.ERROR, "JMusicBot", ex + "\nPlease make sure you are "
                     + "editing the correct config.txt file, and that you have used the "
                     + "correct token (not the 'secret'!)\nConfig Location: " + config.getConfigLocation());
             System.exit(1);
         }
-        catch(IllegalArgumentException ex)
-        {
+        catch(IllegalArgumentException ex) {
             prompt.alert(Prompt.Level.ERROR, "JMusicBot", "Some aspect of the configuration is "
                     + "invalid: " + ex + "\nConfig Location: " + config.getConfigLocation());
             System.exit(1);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

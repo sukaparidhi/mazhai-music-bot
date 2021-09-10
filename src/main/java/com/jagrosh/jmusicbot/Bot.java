@@ -15,13 +15,12 @@
  */
 package com.jagrosh.jmusicbot;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import com.jagrosh.jmusicbot.audio.AloneInVoiceHandler;
-import com.jagrosh.jmusicbot.audio.AudioHandler;
-import com.jagrosh.jmusicbot.audio.NowplayingHandler;
-import com.jagrosh.jmusicbot.audio.PlayerManager;
+import com.jagrosh.jmusicbot.audio.*;
 import com.jagrosh.jmusicbot.gui.GUI;
 import com.jagrosh.jmusicbot.playlist.PlaylistLoader;
 import com.jagrosh.jmusicbot.settings.SettingsManager;
@@ -36,6 +35,7 @@ import net.dv8tion.jda.api.entities.Guild;
  */
 public class Bot
 {
+    private static Bot bot;
     private final EventWaiter waiter;
     private final ScheduledExecutorService threadpool;
     private final BotConfig config;
@@ -44,13 +44,13 @@ public class Bot
     private final PlaylistLoader playlists;
     private final NowplayingHandler nowplaying;
     private final AloneInVoiceHandler aloneInVoiceHandler;
+    private final YoutubeUtil youtubeUtil;
     
     private boolean shuttingDown = false;
     private JDA jda;
     private GUI gui;
     
-    public Bot(EventWaiter waiter, BotConfig config, SettingsManager settings)
-    {
+    public Bot(EventWaiter waiter, BotConfig config, SettingsManager settings){
         this.waiter = waiter;
         this.config = config;
         this.settings = settings;
@@ -62,13 +62,23 @@ public class Bot
         this.nowplaying.init();
         this.aloneInVoiceHandler = new AloneInVoiceHandler(this);
         this.aloneInVoiceHandler.init();
+        this.youtubeUtil = YoutubeUtil.create(this);
+        bot = this;
     }
     
     public BotConfig getConfig()
     {
         return config;
     }
-    
+
+    public YoutubeUtil getYoutubeUtil() {
+        return youtubeUtil;
+    }
+
+    public static Bot getBot() {
+        return bot;
+    }
+
     public SettingsManager getSettingsManager()
     {
         return settings;
