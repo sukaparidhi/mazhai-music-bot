@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright 2016 John Grosh (jagrosh).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  *
- * @author John Grosh (jagrosh)
+ * @author John Grosh (jagrosh) / dprabah / PSK.
  */
 public class JMusicBot 
 {
