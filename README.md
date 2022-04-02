@@ -1,4 +1,4 @@
-<img align="right" src="https://imgur.com/3RWF0BD" height="200" width="200">
+<img align="right" src="https://i.imgur.com/3RWF0BD.jpg" height="200" width="200">
 
 # Mazhai Music Bot forked from dprabah/MusicBot
 
